@@ -1,0 +1,16 @@
+<h1>Welcome to meetings</h1>
+
+<div class="row" >
+    <div class="col-md-8 col-md-offset-2">
+        <a href="#/">Back to homepage</a>
+        <uib-accordion close-others="oneAtATime">
+            <uib-accordion-group heading="{{vm.formatDate(meeting.date)}} - {{meeting.platform}} - {{meeting.location}}" ng-repeat="meeting in vm.meetings">
+                {{meeting.platform}} - {{meeting.location}}
+                <h5 for="participant">Participants</h5>
+                <ul>
+                    <li ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
+                </ul>
+            </uib-accordion-group>
+        </uib-accordion>
+    </div>
+</div>

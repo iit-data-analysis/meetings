@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <base href="/">
+        <link href="/app.css" rel="stylesheet" />
+        <link href="/bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+        <title>Meetings</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+    </head>
+    <body ng-app="meetings" ><div class="container main-view" ng-view></div>
+        <!-- build:js /app.js -->
+
+        <!-- bower -->
+        <script src="/bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="/bower_components/angular/angular.js"></script>
+        <script src="/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="/bower_components/angular-route/angular-route.js"></script>
+        <script src="/bower_components/lodash/lodash.min.js"></script>
+        <script src="/bower_components/restangular/dist/restangular.min.js"></script>
+        <script src="/bower_components/angular-animate/angular-animate.min.js"></script>
+        <script src="/bower_components/angular-bootstrap/ui-bootstrap-tpls.min.js"></script>
+        <script src="/bower_components/angular-cookies/angular-cookies.min.js"></script>
+        <!-- endbower -->
+
+        <!-- appcode -->
+        <script src="/modules.js"></script>
+        <script src="/app.js"></script>
+        <script src="/homeController.js"></script>
+        <script src="/MeetingsService.js"></script>
+        <script src="/PeopleService.js"></script>
+        <script src="/datepickerlocaldate.js"></script>
+        <script src="/UsersService.js"></script>
+        <script src="/loginController.js"></script>
+        <script src="/meetingsController.js"></script>
+        <!-- endappcode -->
+
+        <!-- endbuild -->
+    </body>
+</html>

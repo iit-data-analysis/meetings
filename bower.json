@@ -1,0 +1,22 @@
+{
+  "name": "meetings",
+  "version": "0.0.1",
+  "ignore": [
+    "**/.*"
+  ],
+  "private": true,
+  "dependencies": {
+    "angular": "*",
+    "angular-route": "*",
+    "bootstrap": "~3.3.6",
+    "font-awesome": "*",
+    "lodash": "*",
+    "restangular": "*",
+    "jquery": "*",
+    "angular-mocks": "*",
+    "bootstrap-ui": "~1.0.0",
+    "angular-bootstrap": "~1.0.0",
+    "angular-animate": "~1.4.8",
+    "angular-cookies": "~1.4.8"
+  }
+}
