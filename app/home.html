@@ -44,7 +44,7 @@
                 </form>
             </div>
         </div>
-        <h2>Last meetings</h2>
+        <h2 class="text-center">Last inserted meetings</h2>
         <uib-accordion close-others="oneAtATime">
             <uib-accordion-group ng-repeat="meeting in vm.meetings">
                 <uib-accordion-heading>
@@ -56,7 +56,9 @@
                     <li class="list-group-item" ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
                 </ul>
                 <h4>Topics</h4>
-                <p style="white-space: pre;">{{meeting.topics}}</p>
+                <div class="well">
+                    <p style="white-space: pre;">{{meeting.topics}}</p>
+                </div>
             </uib-accordion-group>
         </uib-accordion>
         <a href="#/meetings">View All</a>

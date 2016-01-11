@@ -2,7 +2,6 @@
 
 <div class="row" >
     <div class="col-md-8 col-md-offset-2">
-        <a href="#/">Back to homepage</a>
         <uib-accordion close-others="oneAtATime">
             <uib-accordion-group ng-repeat="meeting in vm.meetings">
                 <uib-accordion-heading>
@@ -14,7 +13,9 @@
                     <li class="list-group-item" ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
                 </ul>
                 <h4>Topics</h4>
-                <p style="white-space: pre;">{{meeting.topics}}</p>
+                <div class="well">
+                    <p style="white-space: pre;">{{meeting.topics}}</p>
+                </div>
             </uib-accordion-group>
         </uib-accordion>
     </div>
