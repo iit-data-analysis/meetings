@@ -128,6 +128,18 @@ app.get('/', function (req, res) {
     renderIndex(req.config, res);
 });
 
+app.use('/api/login', function (req, res, next) {
+  return new User()
+          .query({where: {username: req.body.username}})
+          .fetch()
+          .then(function(user) {
+              if (!user)
+                  return res.status(500).json({err: 'user not allowed'});
+              else
+                  next();
+  });
+});
+        
 app.post('/api/login',
         passport.authenticate('ldapauth', {failWithError: true}),
         function (req, res, next) {
