@@ -37,6 +37,18 @@ angular.module('meetings')
                                 Notification.error('Login Failed');
                             });
                 },
+                logout: function () {
+                    return $http.post('api/logout')
+                            .then(function (res) {
+                                var user = res.data.session;
+                                UserService.isLogged = false;
+                                UserService.username = null;
+                                UserService.resetUser();
+                                return user;
+                            }, function () {
+                                Notification.error('Logout Failed');
+                            });
+                },
                 user: {}
             };
             UserService.user = sessionStorage.user ?

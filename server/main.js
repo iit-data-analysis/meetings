@@ -157,7 +157,7 @@ app.post('/api/login',
             return res.status(500).json(err);
         });
 
-app.post('/logout', isLoggedIn, function (req, res) {
+app.post('/api/logout', isLoggedIn, function (req, res) {
     req.logout();
     res.send();
 });
