@@ -140,19 +140,14 @@ app.post('/api/login',
             });
         },
         function (err, req, res, next) {
+            console.log(err);
             // handle error
-            if (req.xhr) {
-                return res.json(err);
-            }
-            return res.redirect('/');
+            return res.status(500).json(err);
         });
 
 app.post('/logout', isLoggedIn, function (req, res) {
     req.logout();
-    if (req.xhr)
-        res.redirect('/');
-    else
-        res.send();
+    res.send();
 });
 
 

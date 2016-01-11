@@ -4,5 +4,6 @@ var meetings = angular.module('meetings', [
     'restangular',
     'ngAnimate',
     'ui.bootstrap',
-    'ngCookies'
+    'ngCookies',
+    'ui-notification'
 ]);

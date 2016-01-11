@@ -1,5 +1,5 @@
 angular.module('meetings')
-        .factory('UsersService', function ($http) {
+        .factory('UsersService', function ($http, Notification) {
             var UserService = {
                 getEmptyUser: function () {
                     return {
@@ -25,21 +25,23 @@ angular.module('meetings')
                     var emptyUser = this.getEmptyUser();
                     this.saveUser(emptyUser);
                 },
-                login: function(credentials) {
+                login: function (credentials) {
                     return $http.post('api/login', credentials)
-                            .then(function(res) {
+                            .then(function (res) {
                                 var user = res.data.session;
                                 UserService.isLogged = true;
                                 UserService.username = res.data.username;
                                 UserService.saveUser(res.data.session);
                                 return user;
-                    });
+                            }, function () {
+                                Notification.error('Login Failed');
+                            });
                 },
                 user: {}
             };
-            UserService.user = sessionStorage.user ? 
-            angular.fromJson(sessionStorage.user) : 
-            UserService.getEmptyUser();
+            UserService.user = sessionStorage.user ?
+                    angular.fromJson(sessionStorage.user) :
+                    UserService.getEmptyUser();
             UserService.user.expires = new Date(UserService.user.expires);
             if (UserService.user.expires < new Date())
                 UserService.resetUser();
