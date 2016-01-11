@@ -11,7 +11,7 @@
                     </div>
                     <div class="form-group">
                         <label for="topics">Topics</label>
-                        <textarea class="form-control" id="topics" placeholder="Topics" ng-model="vm.newMeeting.topics" ></textarea>
+                        <textarea rows="5" class="form-control" id="topics" placeholder="Topics" ng-model="vm.newMeeting.topics" ></textarea>
                     </div>
                     <div class="form-group">
                         <label for="platform">Platform</label>
@@ -46,12 +46,17 @@
         </div>
         <h2>Last meetings</h2>
         <uib-accordion close-others="oneAtATime">
-            <uib-accordion-group heading="{{vm.formatDate(meeting.date)}} - {{meeting.platform}} - {{meeting.location}}" ng-repeat="meeting in vm.meetings">
-                {{meeting.platform}} - {{meeting.location}}
-                <h5 for="participant">Participants</h5>
-                <ul>
-                    <li ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
+            <uib-accordion-group ng-repeat="meeting in vm.meetings">
+                <uib-accordion-heading>
+                    <b>{{meeting.platform}}</b> - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]
+                </uib-accordion-heading>
+                <h3>{{meeting.platform}} - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]</h3>
+                <h4>Participants</h4>
+                <ul class="list-group">
+                    <li class="list-group-item" ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
                 </ul>
+                <h4>Topics</h4>
+                <p style="white-space: pre;">{{meeting.topics}}</p>
             </uib-accordion-group>
         </uib-accordion>
         <a href="#/meetings">View All</a>
