@@ -13,7 +13,7 @@ angular.module('meetings')
             };
         });
 
-function meetingsListController($uibModal) {
+function meetingsListController($uibModal, Notification) {
     var vm = this;
     vm.deleteMeeting = deleteMeeting;
     vm.askDeleteConfirmation = askDeleteConfirmation;
@@ -28,7 +28,7 @@ function meetingsListController($uibModal) {
         }, function () {
         });
     }
-    
+
     function askDeleteConfirmation(meeting, $event) {
         var resolve = {meeting: meeting};
         var modalInstance = openModal('deleteConfirmation.html', 'ModalInstanceCtrl', resolve, $event);
@@ -40,7 +40,11 @@ function meetingsListController($uibModal) {
     }
 
     function deleteMeeting(meeting) {
-        _.remove(vm.meetings, meeting);
+        meeting.remove()
+                .then(function (m) {
+                    Notification.success('Meeting deleted');
+                    _.remove(vm.meetings, meeting);
+                });
     }
 
     function openModal(templateUrl, controller, resolve, $event) {

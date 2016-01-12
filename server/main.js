@@ -129,17 +129,17 @@ app.get('/', function (req, res) {
 });
 
 app.use('/api/login', function (req, res, next) {
-  return new User()
-          .query({where: {username: req.body.username}})
-          .fetch()
-          .then(function(user) {
-              if (!user)
-                  return res.status(500).json({err: 'user not allowed'});
-              else
-                  next();
-  });
+    return new User()
+            .query({where: {username: req.body.username}})
+            .fetch()
+            .then(function (user) {
+                if (!user)
+                    return res.status(500).json({err: 'user not allowed'});
+                else
+                    next();
+            });
 });
-        
+
 app.post('/api/login',
         passport.authenticate('ldapauth', {failWithError: true}),
         function (req, res, next) {
@@ -248,6 +248,15 @@ app.post('/api/people', isLoggedIn, function (req, res) {
         console.log(error.stack);
         res.send('Error creating Person');
     });
+});
+
+app.delete('/api/meetings/:id', isLoggedIn, function (req, res) {
+    var meetingId = req.params.id;
+    new Meeting({id: meetingId})
+            .destroy()
+            .then(function () {
+                res.send();
+            });
 });
 
 app.listen(port, function () {
