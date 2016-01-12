@@ -13,28 +13,27 @@ angular.module('meetings')
             };
         });
 
-function meetingsListController($scope, $uibModal) {
+function meetingsListController($uibModal) {
     var vm = this;
     vm.deleteMeeting = deleteMeeting;
     vm.askDeleteConfirmation = askDeleteConfirmation;
+    vm.openEditingForm = openEditingForm;
 
-    function askDeleteConfirmation(meeting, $event) {
-        if ($event) {
-            $event.preventDefault();
-            $event.stopPropagation();
-        }
+    function openEditingForm(meeting, $event) {
+        var resolve = {meeting: meeting};
+        var modalInstance = openModal('editingForm.html', 'editingFormCtrl', resolve, $event);
 
-        vm.modalInstance = $uibModal.open({
-            animation: true,
-            templateUrl: 'deleteConfirmation.html',
-            controller: 'ModalInstanceCtrl',
-            controllerAs: 'vm',
-            resolve: {
-                meeting: meeting
-            }
+        modalInstance.result.then(function (meeting) {
+            console.log(arguments);
+        }, function () {
         });
+    }
+    
+    function askDeleteConfirmation(meeting, $event) {
+        var resolve = {meeting: meeting};
+        var modalInstance = openModal('deleteConfirmation.html', 'ModalInstanceCtrl', resolve, $event);
 
-        vm.modalInstance.result.then(function (meeting) {
+        modalInstance.result.then(function (meeting) {
             deleteMeeting(meeting);
         }, function () {
         });
@@ -42,6 +41,22 @@ function meetingsListController($scope, $uibModal) {
 
     function deleteMeeting(meeting) {
         _.remove(vm.meetings, meeting);
+    }
+
+    function openModal(templateUrl, controller, resolve, $event) {
+        if ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+        }
+
+        var modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: templateUrl,
+            controller: controller,
+            controllerAs: 'vm',
+            resolve: resolve
+        });
+        return modalInstance;
     }
 }
 
@@ -56,4 +71,9 @@ angular.module('meetings').controller('ModalInstanceCtrl', function ($scope, $ui
     vm.cancel = function () {
         $uibModalInstance.dismiss();
     };
+});
+
+angular.module('meetings').controller('editingFormCtrl', function ($scope, $uibModalInstance, meeting) {
+    var vm = this;
+    vm.meeting = meeting;
 });

@@ -8,12 +8,13 @@ angular.module('meetings')
                 scope: {
                 },
                 bindToController: {
-                    onSubmit: '&'
+                    onSubmit: '&',
+                    meeting: '='
                 }
             };
         });
 
-function meetingsFormController(MeetingsService, PeopleService, Restangular) {
+function meetingsFormController(MeetingsService, PeopleService, Restangular, Notification) {
     var vm = this;
     vm.submit = submit;
     vm.getPlatforms = getPlatforms;
@@ -23,6 +24,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular) {
     vm.closePopover = closePopover;
     vm.submitPerson = submitPerson;
     vm.removeParticipant = removeParticipant;
+    vm.creationMode = false;
 
     activate();
 
@@ -37,15 +39,19 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular) {
         vm.popover = {
             'popover-is-open': false
         };
-        vm.newMeeting = MeetingsService.getNewMeeting();
         vm.newPerson = PeopleService.getNewPerson();
-        if (vm.onsubmit)
+        if (!vm.meeting) {
+            vm.meeting = MeetingsService.getNewMeeting();
+            vm.creationMode = true;
+        }
+        if (_.isFunction(vm.onSubmit()))
             vm.onSubmit()();
     }
 
     function submit() {
-        return MeetingsService.post(vm.newMeeting)
+        return MeetingsService.post(vm.meeting)
                 .then(function () {
+                    Notification.success('Meeting created');
                     reset();
                 });
     }
@@ -72,7 +78,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular) {
     }
 
     function addParticipant(participant) {
-        vm.newMeeting.participants.push(participant);
+        vm.meeting.participants.push(participant);
         vm.newParticipant = '';
     }
 
@@ -81,7 +87,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular) {
     }
 
     function removeParticipant(participant) {
-        _.remove(vm.newMeeting.participants, participant);
+        _.remove(vm.meeting.participants, participant);
     }
 }
 
