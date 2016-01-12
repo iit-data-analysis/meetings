@@ -39,7 +39,8 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular) {
         };
         vm.newMeeting = MeetingsService.getNewMeeting();
         vm.newPerson = PeopleService.getNewPerson();
-        vm.onSubmit()();
+        if (vm.onsubmit)
+            vm.onSubmit()();
     }
 
     function submit() {
