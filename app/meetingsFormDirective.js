@@ -32,6 +32,11 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
         reset();
     }
 
+    function callOnSubmitCallback() {
+        if (_.isFunction(vm.onSubmit()))
+            vm.onSubmit()();
+    }
+
     function reset() {
         vm.popup1 = {
             opened: false
@@ -44,16 +49,23 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
             vm.meeting = MeetingsService.getNewMeeting();
             vm.creationMode = true;
         }
-        if (_.isFunction(vm.onSubmit()))
-            vm.onSubmit()();
     }
 
     function submit() {
-        return MeetingsService.post(vm.meeting)
-                .then(function () {
-                    Notification.success('Meeting created');
-                    reset();
-                });
+        if (vm.creationMode)
+            return MeetingsService.post(vm.meeting)
+                    .then(function () {
+                        Notification.success('Meeting created');
+                        reset();
+                        callOnSubmitCallback();
+                    });
+        else
+            return vm.meeting.put()
+                    .then(function () {
+                        Notification.success('Meeting updated');
+                        reset();
+                        callOnSubmitCallback();
+                    });
     }
 
     function submitPerson() {

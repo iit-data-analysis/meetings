@@ -64,7 +64,7 @@ function meetingsListController($uibModal, Notification) {
     }
 }
 
-angular.module('meetings').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, meeting) {
+angular.module('meetings').controller('ModalInstanceCtrl', function ($uibModalInstance, meeting) {
     var vm = this;
     vm.meeting = meeting;
 
@@ -77,7 +77,12 @@ angular.module('meetings').controller('ModalInstanceCtrl', function ($scope, $ui
     };
 });
 
-angular.module('meetings').controller('editingFormCtrl', function ($scope, $uibModalInstance, meeting) {
+angular.module('meetings').controller('editingFormCtrl', function ($uibModalInstance, meeting) {
     var vm = this;
     vm.meeting = meeting;
+
+    vm.ok = function (meeting) {
+        $uibModalInstance.close(meeting);
+    };
+
 });

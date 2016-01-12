@@ -239,6 +239,29 @@ app.post('/api/meetings', isLoggedIn, function (req, res) {
             });
 });
 
+app.put('/api/meetings/:id', isLoggedIn, function (req, res) {
+    var meetingFields = ['location', 'date', 'topics', 'platform'];
+    var meetingId = req.params.id;
+    var data = _.pick(req.body, meetingFields);
+    var participants = req.body.participants;
+    new Meeting({id: meetingId})
+            .save(data)
+            .then(function (meeting) {
+                return meeting.participants().detach()
+                        .then(function (m) {
+                            var participantsIds = _.map(participants, 'id');
+                            return meeting.participants().attach(participantsIds);
+                        });
+            })
+            .then(function (meeting) {
+                res.send(meeting);
+            })
+            .catch(function (error) {
+                console.log(error.stack);
+                res.send('Error creating Meeting');
+            });
+});
+
 app.post('/api/people', isLoggedIn, function (req, res) {
     var meetingFields = ['surname', 'institute'];
     var data = _.pick(req.body, meetingFields);
