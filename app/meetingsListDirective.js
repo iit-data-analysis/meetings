@@ -13,21 +13,47 @@ angular.module('meetings')
             };
         });
 
-function meetingsListController($scope) {
+function meetingsListController($scope, $uibModal) {
     var vm = this;
-    vm.formatDate = formatDate;
+    vm.deleteMeeting = deleteMeeting;
+    vm.askDeleteConfirmation = askDeleteConfirmation;
 
-    function formatDate(date) {
-        var d = new Date(date),
-                month = '' + (d.getMonth() + 1),
-                day = '' + d.getDate(),
-                year = d.getFullYear();
+    function askDeleteConfirmation(meeting, $event) {
+        if ($event) {
+            $event.preventDefault();
+            $event.stopPropagation();
+        }
 
-        if (month.length < 2)
-            month = '0' + month;
-        if (day.length < 2)
-            day = '0' + day;
+        vm.modalInstance = $uibModal.open({
+            animation: true,
+            templateUrl: 'deleteConfirmation.html',
+            controller: 'ModalInstanceCtrl',
+            controllerAs: 'vm',
+            resolve: {
+                meeting: meeting
+            }
+        });
 
-        return [year, month, day].join('-');
+        vm.modalInstance.result.then(function (meeting) {
+            deleteMeeting(meeting);
+        }, function () {
+        });
+    }
+
+    function deleteMeeting(meeting) {
+        _.remove(vm.meetings, meeting);
     }
 }
+
+angular.module('meetings').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance, meeting) {
+    var vm = this;
+    vm.meeting = meeting;
+
+    vm.proceed = function (meeting) {
+        $uibModalInstance.close(meeting);
+    };
+
+    vm.cancel = function () {
+        $uibModalInstance.dismiss();
+    };
+});

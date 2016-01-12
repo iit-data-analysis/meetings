@@ -1,9 +1,12 @@
 <uib-accordion close-others="oneAtATime">
     <uib-accordion-group ng-repeat="meeting in vm.meetings">
         <uib-accordion-heading>
-            <b>{{meeting.platform}}</b> - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]
+            <b>{{meeting.platform}}</b> - {{meeting.location}} [{{meeting.date | formatDate}}]
+            <button type="button" class="btn btn-default badge pull-right" ng-click="vm.askDeleteConfirmation(meeting, $event)" data-toggle="modal" data-target="#confirm-delete">
+                <i class="glyphicon glyphicon-remove"></i>
+            </button>
         </uib-accordion-heading>
-        <h3>{{meeting.platform}} - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]</h3>
+        <h3>{{meeting.platform}} - {{meeting.location}} [{{meeting.date | formatDate}}]</h3>
         <h4>Participants</h4>
         <ul class="list-group">
             <li class="list-group-item" ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
@@ -14,3 +17,16 @@
         </div>
     </uib-accordion-group>
 </uib-accordion>
+
+<script type="text/ng-template" id="deleteConfirmation.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Confirmation</h3>
+        </div>
+        <div class="modal-body">
+            You are deleting the meeting <b>{{vm.meeting.platform}}</b> - {{vm.meeting.location}} [{{vm.meeting.date | formatDate}}]
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="vm.proceed(vm.meeting)">Proceed</button>
+            <button class="btn btn-warning" type="button" ng-click="vm.cancel()">Cancel</button>
+        </div>
+</script>
