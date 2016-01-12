@@ -11,8 +11,10 @@ exports.up = function(knex, Promise) {
         }),
         knex.schema.createTable('meetings_people', function(table) {
             table.increments();
-            table.biginteger('meeting_id').unsigned().index().references('id').inTable('meetings');
-            table.biginteger('person_id').unsigned().index().references('id').inTable('people');
+            table.biginteger('meeting_id').unsigned().index().references('id')
+                    .inTable('meetings').onDelete('CASCADE').onUpdate('RESTRICT');
+            table.biginteger('person_id').unsigned().index().references('id')
+                    .inTable('people').onDelete('CASCADE').onUpdate('RESTRICT');
         })
     ]);
 };
