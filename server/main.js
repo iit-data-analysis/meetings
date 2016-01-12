@@ -223,14 +223,10 @@ app.post('/api/meetings', isLoggedIn, function (req, res) {
     var participants = req.body.participants;
     new Meeting(data).save()
             .then(function (meeting) {
-                var meetingParticipants = [];
-                if (participants)
-                    meetingParticipants = _.map(participants, function (p) {
-                        return {person_id: p.id, meeting_id: meeting.id};
-                    });
-                return BPromise.all([meeting, knex('meetings_people').insert(meetingParticipants)]);
+                var participantsIds = _.map(participants, 'id');
+                return meeting.participants().attach(participantsIds);
             })
-            .spread(function (meeting) {
+            .then(function (meeting) {
                 res.send(meeting);
             })
             .catch(function (error) {
