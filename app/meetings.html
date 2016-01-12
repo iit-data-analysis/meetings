@@ -2,21 +2,6 @@
 
 <div class="row" >
     <div class="col-md-8 col-md-offset-2">
-        <uib-accordion close-others="oneAtATime">
-            <uib-accordion-group ng-repeat="meeting in vm.meetings">
-                <uib-accordion-heading>
-                    <b>{{meeting.platform}}</b> - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]
-                </uib-accordion-heading>
-                <h3>{{meeting.platform}} - {{meeting.location}} [{{vm.formatDate(meeting.date)}}]</h3>
-                <h4>Participants</h4>
-                <ul class="list-group">
-                    <li class="list-group-item" ng-repeat="person in meeting.participants">{{person.surname}} ({{person.institute}})</li>
-                </ul>
-                <h4>Topics</h4>
-                <div class="well">
-                    <p style="white-space: pre;">{{meeting.topics}}</p>
-                </div>
-            </uib-accordion-group>
-        </uib-accordion>
+        <iit-meetings-list meetings="vm.meetings"></iit-meetings-list>
     </div>
 </div>

@@ -6,7 +6,6 @@
     function homeController(MeetingsService, PeopleService, Restangular, $scope) {
         var vm = this;
         vm.submit = submit;
-        vm.formatDate = formatDate;
         vm.getPlatforms = getPlatforms;
         vm.getPeople = getPeople;
         vm.openDatePicker = openDatePicker;
@@ -56,20 +55,6 @@
                         vm.newPerson = PeopleService.getNewPerson();
                         closePopover();
                     });
-        }
-
-        function formatDate(date) {
-            var d = new Date(date),
-                    month = '' + (d.getMonth() + 1),
-                    day = '' + d.getDate(),
-                    year = d.getFullYear();
-
-            if (month.length < 2)
-                month = '0' + month;
-            if (day.length < 2)
-                day = '0' + day;
-
-            return [year, month, day].join('-');
         }
 
         function getPlatforms(q) {
