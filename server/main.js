@@ -214,6 +214,22 @@ app.get('/api/people', isLoggedIn, function (req, res) {
     });
 });
 
+app.get('/api/institutes', function (req, res) {
+    var q = req.query.q || '';
+    knex('people')
+            .distinct('institute')
+            .where('institute', 'like', '%' + q + '%')
+            .map(function (row) {
+                return row.institute;
+            })
+            .then(function (people) {
+                res.send(people);
+            }).catch(function (error) {
+        console.log(error.stack);
+        res.send('Error getting Institute');
+    });
+});
+
 app.get('/api/platforms', isLoggedIn, function (req, res) {
     var q = req.query.q || '';
     knex('meetings')
