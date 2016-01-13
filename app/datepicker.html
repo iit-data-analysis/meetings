@@ -1,0 +1,6 @@
+<div class="input-group">
+    <input type="text" ng-click="vm.openDatePicker()" datepicker-localdate class="form-control" id="{{vm.id}}" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.ngModel" is-open="vm.popup.opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" alt-input-formats="['M!/d!/yyyy']" />
+    <span class="input-group-btn">
+        <button type="button" class="btn btn-default" ng-click="vm.openDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+    </span>
+</div>
