@@ -199,6 +199,10 @@ app.get('/api/meetings', isLoggedIn, function (req, res) {
                 withRelated: ['participants']
             })
             .then(function (meetings) {
+                meetings = _.map(meetings.toJSON(), function (m) {
+                    m.date = formatDate(m.date);
+                    return m;
+                });
                 res.send(meetings);
             }).catch(function (error) {
         console.log(error.stack);
@@ -336,4 +340,18 @@ function addPathPrefix(filePath, prefix) {
 
 function getFileExtension(filePath) {
     return filePath.split('.').pop();
+}
+
+function formatDate(date) {
+    var d = new Date(date),
+            month = '' + (d.getMonth() + 1),
+            day = '' + d.getDate(),
+            year = d.getFullYear();
+
+    if (month.length < 2)
+        month = '0' + month;
+    if (day.length < 2)
+        day = '0' + day;
+
+    return [year, month, day].join('-');
 }
