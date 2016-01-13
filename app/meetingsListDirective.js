@@ -89,6 +89,7 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
                 .then(function (m) {
                     Notification.success('Meeting deleted');
                     _.remove(vm.meetings, meeting);
+                    refresh();
                 });
     }
 
