@@ -2,7 +2,7 @@
     <form class="form-inline">
         Filter by:
         <div class="form-group">
-            <select class="form-control" ng-model="vm.searchField">
+            <select class="form-control" ng-model="vm.searchField" ng-change="vm.resetSearchField()">
                 <option value="">-- NO FILTER --</option>
                 <option value="surname">Participant</option>
                 <option value="institute">Institute</option>

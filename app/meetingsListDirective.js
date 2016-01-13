@@ -25,6 +25,7 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     vm.getPeople = getPeople;
     vm.getInstitutes = getInstitutes;
     vm.openDatePicker = openDatePicker;
+    vm.resetSearchField = resetSearchField;
 
     activate();
 
@@ -61,6 +62,10 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
 
     function getInstitutes(q) {
         return Restangular.all('institutes').getList({q: q});
+    }
+    
+    function resetSearchField() {
+        vm.filteringValue = '';
     }
     
     function openDatePicker() {
