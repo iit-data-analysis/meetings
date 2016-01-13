@@ -24,7 +24,6 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     vm.getMeetings = getMeetings;
     vm.getPeople = getPeople;
     vm.getInstitutes = getInstitutes;
-    vm.openDatePicker = openDatePicker;
     vm.resetSearchField = resetSearchField;
 
     activate();
@@ -35,9 +34,6 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     }
 
     function refresh() {
-        vm.popup1 = {
-            opened: false
-        };
         getMeetings();
     }
 
@@ -65,11 +61,7 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     }
     
     function resetSearchField() {
-        vm.filteringValue = '';
-    }
-    
-    function openDatePicker() {
-        vm.popup1.opened = true;
+            vm.filteringValue = '';
     }
 
     function openEditingForm(meeting, $event) {

@@ -19,14 +19,13 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     vm.submit = submit;
     vm.getPlatforms = getPlatforms;
     vm.getPeople = getPeople;
-    vm.openDatePicker = openDatePicker;
     vm.addParticipant = addParticipant;
     vm.closePopover = closePopover;
     vm.submitPerson = submitPerson;
     vm.removeParticipant = removeParticipant;
     vm.creationMode = false;
     vm.getInstitutes = getInstitutes;
-
+    
     activate();
 
     function activate() {
@@ -39,9 +38,6 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     }
     
     function setupComponents() {
-        vm.popup1 = {
-            opened: false
-        };
         vm.popover = {
             'popover-is-open': false
         };
@@ -93,11 +89,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     function getPeople(q) {
         return PeopleService.getList({q: q});
     }
-
-    function openDatePicker() {
-        vm.popup1.opened = true;
-    }
-
+    
     function addParticipant(participant) {
         vm.meeting.participants.push(participant);
         vm.newParticipant = '';
