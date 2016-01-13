@@ -8,7 +8,6 @@ var knex = require('knex')(knexConfig.development);
 var bookshelf = require('bookshelf')(knex);
 var bodyParser = require('body-parser');
 var _ = require('lodash');
-var BPromise = require('bluebird');
 var passport = require('passport');
 var LdapStrategy = require('passport-ldapauth').Strategy;
 var session = require('express-session');
@@ -173,16 +172,29 @@ app.get('/api/users', isLoggedIn, function (req, res) {
 });
 
 app.get('/api/meetings', isLoggedIn, function (req, res) {
-    new Meeting().query(function (qb) {
-        qb.orderBy('updated_at', 'desc');
-        if (req.query.limit)
-            qb.limit(req.query.limit);
-    })
+    var limit = req.query.limit;
+    var surname = req.query.surname;
+    var institute = req.query.institute;
+    new Meeting()
+            .query(function (qb) {
+                qb.orderBy('updated_at', 'desc');
+                if (limit)
+                    qb.limit(limit);
+                if (surname)
+                    qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
+                            .join('people', 'people.id', '=', 'meetings_people.person_id')
+                            .where('people.surname', '=', surname);
+                if (institute)
+                    qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
+                            .join('people', 'people.id', '=', 'meetings_people.person_id')
+                            .where('people.institute', '=', institute);
+            })
             .fetchAll({
                 withRelated: ['participants']
-            }).then(function (meetings) {
-        res.send(meetings);
-    }).catch(function (error) {
+            })
+            .then(function (meetings) {
+                res.send(meetings);
+            }).catch(function (error) {
         console.log(error.stack);
         res.send('Error getting Meetings');
     });
