@@ -9,7 +9,8 @@ angular.module('meetings')
                 },
                 bindToController: {
                     ngModel: '=',
-                    id: '@'
+                    id: '@',
+                    placeholder: '@'
                 }
             };
         });
