@@ -29,7 +29,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     activate();
 
     function activate() {
-        setupComponents();
+        reset();
     }
 
     function callOnSubmitCallback() {
@@ -49,7 +49,9 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
 
     function reset() {
         setupComponents();
-        vm.meeting = MeetingsService.getNewMeeting();
+        if (vm.creationMode)
+            vm.meeting = MeetingsService.getNewMeeting();
+        vm.newParticipant = '';
     }
     
     function getInstitutes(q) {
