@@ -16,13 +16,14 @@ angular.module('meetings')
             };
         });
 
-function meetingsListController($uibModal, Notification, MeetingsService, PeopleService, $scope) {
+function meetingsListController($uibModal, Notification, MeetingsService, PeopleService, Restangular, $scope) {
     var vm = this;
     vm.deleteMeeting = deleteMeeting;
     vm.askDeleteConfirmation = askDeleteConfirmation;
     vm.openEditingForm = openEditingForm;
     vm.getMeetings = getMeetings;
     vm.getPeople = getPeople;
+    vm.getInstitutes = getInstitutes;
 
     activate();
 
@@ -52,6 +53,10 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     
     function getPeople(q) {
         return PeopleService.getList({q: q});
+    }
+    
+    function getInstitutes(q) {
+        return Restangular.all('institutes').getList({q: q});
     }
 
     function openEditingForm(meeting, $event) {
