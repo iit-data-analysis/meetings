@@ -214,7 +214,7 @@ app.get('/api/people', isLoggedIn, function (req, res) {
     });
 });
 
-app.get('/api/institutes', function (req, res) {
+app.get('/api/institutes', isLoggedIn, function (req, res) {
     var q = req.query.q || '';
     knex('people')
             .distinct('institute')
