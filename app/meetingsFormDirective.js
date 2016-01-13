@@ -14,7 +14,7 @@ angular.module('meetings')
             };
         });
 
-function meetingsFormController(MeetingsService, PeopleService, Restangular, Notification) {
+function meetingsFormController(MeetingsService, PeopleService, Restangular, Notification, $rootScope) {
     var vm = this;
     vm.submit = submit;
     vm.getPlatforms = getPlatforms;
@@ -58,6 +58,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
                         Notification.success('Meeting created');
                         reset();
                         callOnSubmitCallback();
+                        $rootScope.$broadcast("meeting.created");
                     });
         else
             return vm.meeting.put()

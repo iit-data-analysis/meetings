@@ -10,22 +10,37 @@ angular.module('meetings')
                 bindToController: {
                     meetings: '=',
                     filterActive: '=',
-                    countingActive: '='
+                    countingActive: '=',
+                    limit: '='
                 }
             };
         });
 
-function meetingsListController($uibModal, Notification, MeetingsService) {
+function meetingsListController($uibModal, Notification, MeetingsService, $scope) {
     var vm = this;
     vm.deleteMeeting = deleteMeeting;
     vm.askDeleteConfirmation = askDeleteConfirmation;
     vm.openEditingForm = openEditingForm;
     vm.getMeetings = getMeetings;
 
+    activate();
+
+    function activate() {
+        getMeetings();
+        $scope.$on("meeting.created", refresh());
+    }
+    
+    function refresh() {
+        getMeetings();
+    }
+
     function getMeetings() {
-        var query ={};
+        var query = {};
         if (vm.searchField) {
             query[vm.searchField] = vm.filteringValue;
+        }
+        if (vm.limit) {
+            query.limit = vm.limit;
         }
         return MeetingsService.getList(query)
                 .then(function (meetings) {

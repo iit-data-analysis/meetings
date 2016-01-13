@@ -4,11 +4,11 @@
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
             <div class="panel-body">
-                <iit-meetings-form on-submit="vm.reset"></iit-meetings-form>
+                <iit-meetings-form></iit-meetings-form>
             </div>
         </div>
         <h2 class="text-center">Last inserted meetings</h2>
-        <iit-meetings-list meetings="vm.meetings" filter-active="false" counting-active="false"></iit-meetings-list>
+        <iit-meetings-list meetings="vm.meetings" filter-active="false" counting-active="false" limit="5"></iit-meetings-list>
         <a href="#/meetings">View All</a>
     </div>
 </div>
