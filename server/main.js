@@ -176,11 +176,14 @@ app.get('/api/meetings', isLoggedIn, function (req, res) {
     var surname = req.query.surname;
     var institute = req.query.institute;
     var date = req.query.date;
+    var dateRange = req.query.daterange ? JSON.parse(req.query.daterange) : null;
     new Meeting()
             .query(function (qb) {
                 qb.orderBy('updated_at', 'desc');
                 if (limit)
                     qb.limit(limit);
+                if (dateRange)
+                    qb.whereBetween('date', [dateRange.startDate, dateRange.endDate]);
                 if (date)
                     qb.where('date', '=', date);
                 if (surname)
