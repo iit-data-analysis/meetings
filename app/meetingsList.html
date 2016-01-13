@@ -2,10 +2,10 @@
     <uib-accordion-group ng-repeat="meeting in vm.meetings">
         <uib-accordion-heading>
             <b>{{meeting.platform}}</b> - {{meeting.location}} [{{meeting.date| formatDate}}]
-            <button type="button" class="btn btn-default badge pull-right" ng-click="vm.askDeleteConfirmation(meeting, $event)" data-toggle="modal" data-target="#confirm-delete">
+            <button type="button" class="btn btn-default badge pull-right iit-badge" ng-click="vm.askDeleteConfirmation(meeting, $event)" data-toggle="modal" data-target="#confirm-delete">
                 <i class="glyphicon glyphicon-remove"></i>
             </button>
-            <button type="button" class="btn btn-default badge pull-right" ng-click="vm.openEditingForm(meeting, $event)" data-toggle="modal">
+            <button type="button" class="btn btn-default badge pull-right iit-badge" ng-click="vm.openEditingForm(meeting, $event)" data-toggle="modal">
                 <i class="glyphicon glyphicon-glyphicon glyphicon-pencil"></i>
             </button>
         </uib-accordion-heading>
