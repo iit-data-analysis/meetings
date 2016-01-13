@@ -8,16 +8,31 @@ angular.module('meetings')
                 scope: {
                 },
                 bindToController: {
-                    meetings: '='
+                    meetings: '=',
+                    filterActive: '=',
+                    countingActive: '='
                 }
             };
         });
 
-function meetingsListController($uibModal, Notification) {
+function meetingsListController($uibModal, Notification, MeetingsService) {
     var vm = this;
     vm.deleteMeeting = deleteMeeting;
     vm.askDeleteConfirmation = askDeleteConfirmation;
     vm.openEditingForm = openEditingForm;
+    vm.getMeetings = getMeetings;
+
+    function getMeetings() {
+        var query ={};
+        if (vm.searchField) {
+            query[vm.searchField] = vm.filteringValue;
+        }
+        return MeetingsService.getList(query)
+                .then(function (meetings) {
+                    vm.meetings = meetings;
+                    return vm.meetings;
+                });
+    }
 
     function openEditingForm(meeting, $event) {
         var resolve = {meeting: meeting};
