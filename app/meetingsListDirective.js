@@ -27,7 +27,7 @@ function meetingsListController($uibModal, Notification, MeetingsService, $scope
 
     function activate() {
         getMeetings();
-        $scope.$on("meeting.created", refresh());
+        $scope.$on("meeting.created", refresh);
     }
     
     function refresh() {
