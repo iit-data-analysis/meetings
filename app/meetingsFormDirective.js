@@ -25,6 +25,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     vm.submitPerson = submitPerson;
     vm.removeParticipant = removeParticipant;
     vm.creationMode = false;
+    vm.getInstitutes = getInstitutes;
 
     activate();
 
@@ -49,6 +50,10 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
             vm.meeting = MeetingsService.getNewMeeting();
             vm.creationMode = true;
         }
+    }
+    
+    function getInstitutes(q) {
+        return Restangular.all('institutes').getList({q: q});
     }
 
     function submit() {

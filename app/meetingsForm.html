@@ -46,7 +46,7 @@
     </div>
     <div class="form-group">
     <label for="institute">Institute</label>
-    <input type="text" class="form-control" id="institute" placeholder="Institute" ng-model="vm.newPerson.institute" />
+    <input type="text" ng-model="vm.newPerson.institute" placeholder="search institute..." uib-typeahead="institute for institute in vm.getInstitutes($viewValue)" typeahead-loading="searching" typeahead-no-results="noResults" class="form-control">
     </div>
     <button type="submit" class="btn btn-default" ng-click="vm.submitPerson()">Create</button>
     </form>
