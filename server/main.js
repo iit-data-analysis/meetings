@@ -175,11 +175,14 @@ app.get('/api/meetings', isLoggedIn, function (req, res) {
     var limit = req.query.limit;
     var surname = req.query.surname;
     var institute = req.query.institute;
+    var date = req.query.date;
     new Meeting()
             .query(function (qb) {
                 qb.orderBy('updated_at', 'desc');
                 if (limit)
                     qb.limit(limit);
+                if (date)
+                    qb.where('date', '=', date);
                 if (surname)
                     qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
                             .join('people', 'people.id', '=', 'meetings_people.person_id')
