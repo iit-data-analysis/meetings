@@ -6,6 +6,7 @@
                 <option value="">-- NO FILTER --</option>
                 <option value="surname">Participant</option>
                 <option value="institute">Institute</option>
+                <option value="date">Date</option>
             </select>
         </div>
         <div class="form-group" ng-show="vm.searchField === 'institute'">
@@ -13,6 +14,14 @@
         </div>
         <div class="form-group" ng-show="vm.searchField === 'surname'">
             <input type="text" ng-model="vm.filteringValue" uib-typeahead="person.surname for person in vm.getPeople($viewValue)" typeahead-loading="searching" typeahead-no-results="noResults" class="form-control">
+        </div>
+        <div class="form-group" ng-show="vm.searchField === 'date'">
+            <div class="input-group">
+                <input type="text" datepicker-localdate class="form-control" uib-datepicker-popup="dd-MM-yyyy" ng-model="vm.filteringValue" is-open="vm.popup1.opened" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" close-text="Close" alt-input-formats="['M!/d!/yyyy']" />
+                <span class="input-group-btn">
+                    <button type="button" class="btn btn-default" ng-click="vm.openDatePicker()"><i class="glyphicon glyphicon-calendar"></i></button>
+                </span>
+            </div>
         </div>
         <button type="submit" class="btn btn-default" ng-click="vm.getMeetings()">Search</button>
     </form>

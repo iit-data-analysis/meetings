@@ -24,15 +24,19 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     vm.getMeetings = getMeetings;
     vm.getPeople = getPeople;
     vm.getInstitutes = getInstitutes;
+    vm.openDatePicker = openDatePicker;
 
     activate();
 
     function activate() {
-        getMeetings();
+        refresh();
         $scope.$on("meeting.created", refresh);
     }
-    
+
     function refresh() {
+        vm.popup1 = {
+            opened: false
+        };
         getMeetings();
     }
 
@@ -50,13 +54,17 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
                     return vm.meetings;
                 });
     }
-    
+
     function getPeople(q) {
         return PeopleService.getList({q: q});
     }
-    
+
     function getInstitutes(q) {
         return Restangular.all('institutes').getList({q: q});
+    }
+    
+    function openDatePicker() {
+        vm.popup1.opened = true;
     }
 
     function openEditingForm(meeting, $event) {
