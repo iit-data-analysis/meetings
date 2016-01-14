@@ -5,5 +5,6 @@ var meetings = angular.module('meetings', [
     'ngAnimate',
     'ui.bootstrap',
     'ngCookies',
-    'ui-notification'
+    'ui-notification',
+    'ngFileSaver'
 ]);

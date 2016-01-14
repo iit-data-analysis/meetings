@@ -25,7 +25,8 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     vm.getPeople = getPeople;
     vm.getInstitutes = getInstitutes;
     vm.resetSearchField = resetSearchField;
-
+    vm.export2excel = export2excel;
+    
     activate();
 
     function activate() {
@@ -59,9 +60,9 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     function getInstitutes(q) {
         return Restangular.all('institutes').getList({q: q});
     }
-    
+
     function resetSearchField() {
-            vm.filteringValue = '';
+        vm.filteringValue = '';
     }
 
     function openEditingForm(meeting, $event) {
@@ -72,6 +73,10 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
             console.log(arguments);
         }, function () {
         });
+    }
+    
+    function export2excel() {
+                MeetingsService.export(vm.meetings);
     }
 
     function askDeleteConfirmation(meeting, $event) {
