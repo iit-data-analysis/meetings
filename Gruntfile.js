@@ -1,7 +1,6 @@
 module.exports = function(grunt) {
 
     require('load-grunt-tasks')(grunt);
-    setEnvVars();
 
     grunt.initConfig({
 
@@ -22,12 +21,6 @@ module.exports = function(grunt) {
                 src: ['**/*.js', '!**/*_test.js'],
                 dest: 'dist/app/'
             },
-            app_minified: {
-                expand: true,
-                cwd: 'app',
-                src: ['**/*.js', '!**/*_test.js'],
-                dest: 'dist/app/'
-            },
             server: {
                 expand: true,
                 cwd: 'server',
@@ -35,12 +28,6 @@ module.exports = function(grunt) {
                 dest: 'dist/server'
             },
             server_unminified: {
-                expand: true,
-                cwd: 'server',
-                src: ['views/**'],
-                dest: 'dist/server/'
-            },
-            server_minified: {
                 expand: true,
                 cwd: 'server',
                 src: ['views/**'],
@@ -111,11 +98,6 @@ module.exports = function(grunt) {
                 files: {
                     'dist/app/app.css': 'app/app.less'
                 }
-            },
-            minified: {
-                files: {
-                    'dist/app/minified/app.css': 'app/app.less'
-                }
             }
         },
 
@@ -162,8 +144,7 @@ module.exports = function(grunt) {
                 files: ['app/**/*.html'],
                 tasks: [
                     'jshint:app',
-                    'copy-app-dist',
-                    'prepare-dist'
+                    'copy-app-dist'
                 ]
             },
             app_code: {
@@ -171,7 +152,6 @@ module.exports = function(grunt) {
                 tasks: [
                     'jshint:app',
                     'copy-app-dist',
-                    'prepare-dist',
                     'karma'
                 ]
             },
@@ -180,7 +160,6 @@ module.exports = function(grunt) {
                 tasks: [
                     'jshint:server',
                     'copy-server-dist',
-                    'prepare-dist',
                     'express'
                 ]
             },
@@ -199,9 +178,6 @@ module.exports = function(grunt) {
             'copy:app_unminified',
             'copy:bower_copy'
         ]);
-        if(minOption()) {
-            grunt.task.run('copy:app_minified');
-        }
     });
 
     grunt.registerTask('copy-server-dist', 'Copy server files to dist',
@@ -209,36 +185,18 @@ module.exports = function(grunt) {
         grunt.task.run('copy:server'); 
         grunt.task.run('copy:knexfile'); 
         grunt.task.run('copy:server_unminified');
-        if(minOption()) {
-            grunt.task.run('copy:server_minified');
-        }
     });
 
     grunt.registerTask('compile-less', 'Compile LESS to CSS',
     function() {
         grunt.task.run('less:unminified');
-        if(minOption()) {
-           grunt.task.run('less:minified');
-        }
     });
-
-    grunt.registerTask('prepare-dist', function() {
-        if(minOption()) {
-            grunt.task.run([
-                'useminPrepare',
-                'concat:generated',
-                'uglify:generated',
-                'usemin'
-            ]);
-        }
-    });
-
+    
     grunt.registerTask('build-dist', [
         'clean',
         'copy-app-dist',
         'copy-server-dist',
-        'compile-less',
-        'prepare-dist'
+        'compile-less'
     ]);
 
     grunt.registerTask('default', [
@@ -247,15 +205,4 @@ module.exports = function(grunt) {
         'express',
         'watch'
     ]);
-
-    function setEnvVars() {
-        if(minOption()) {
-            process.env.MINIFY = 'yes';
-        }
-    }
-
-    function minOption() {
-        return grunt.option('minify') || grunt.option('min');
-    }
-
-}
+};
