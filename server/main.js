@@ -7,17 +7,19 @@ var knexConfig = require('../knexfile');
 var knex = require('knex')(knexConfig.development);
 var bookshelf = require('bookshelf')(knex);
 var bodyParser = require('body-parser');
-var _ = require('lodash');
 var passport = require('passport');
 var LdapStrategy = require('passport-ldapauth').Strategy;
 var session = require('express-session');
+var app = module.exports = express();
 
+app.set('knex', knex);
+app.set('bookshelf', bookshelf);
+var controllers = require('./controllers');
 
 var config = {};
 
 config.ldap = require("./ldap.json");
 
-var app = module.exports = express();
 
 var globalConfig = {
     minify: process.env.MINIFY == 'yes' ? true : false,
@@ -61,7 +63,6 @@ app.use(function (req, res, next) {
 app.set('views', path.join(rootPath, 'server'));
 app.engine('html', cons.handlebars);
 app.set('view engine', 'html');
-app.set('bookshelf', bookshelf);
 var models = require('require-directory')(module, './models');
 
 for (var modelName in models) {
@@ -96,10 +97,6 @@ var isLoggedIn = function (req, res, next) {
         res.send(401, {error: 'Unauthorized'});
     }
 };
-
-app.get('/test', isLoggedIn, function (req, res) {
-    res.send('hello');
-});
 
 app.use(function (req, res, next) {
     var config = configFromReq(req);
@@ -162,159 +159,23 @@ app.post('/api/logout', isLoggedIn, function (req, res) {
 });
 
 
-app.get('/api/users', isLoggedIn, function (req, res) {
-    new User().fetchAll().then(function (users) {
-        res.send(users);
-    }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error getting Users');
-    });
-});
+app.get('/api/users', isLoggedIn, controllers.getUsers);
 
-app.get('/api/meetings', isLoggedIn, function (req, res) {
-    var limit = req.query.limit;
-    var surname = req.query.surname;
-    var institute = req.query.institute;
-    var date = req.query.date;
-    var dateRange = req.query.daterange ? JSON.parse(req.query.daterange) : null;
-    new Meeting()
-            .query(function (qb) {
-                qb.orderBy('updated_at', 'desc');
-                if (limit)
-                    qb.limit(limit);
-                if (dateRange)
-                    qb.whereBetween('date', [dateRange.startDate, dateRange.endDate]);
-                if (date)
-                    qb.where('date', '=', date);
-                if (surname)
-                    qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
-                            .join('people', 'people.id', '=', 'meetings_people.person_id')
-                            .where('people.surname', '=', surname);
-                if (institute)
-                    qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
-                            .join('people', 'people.id', '=', 'meetings_people.person_id')
-                            .where('people.institute', '=', institute);
-            })
-            .fetchAll({
-                withRelated: ['participants']
-            })
-            .then(function (meetings) {
-                meetings = _.map(meetings.toJSON(), function (m) {
-                    m.date = formatDate(m.date);
-                    return m;
-                });
-                res.send(meetings);
-            }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error getting Meetings');
-    });
-});
+app.get('/api/meetings', isLoggedIn, controllers.getMeetings);
 
-app.get('/api/people', isLoggedIn, function (req, res) {
-    var q = req.query.q || '';
-    knex('people')
-            .select()
-            .where('surname', 'like', '%' + q + '%')
-            .orWhere('institute', 'like', '%' + q + '%')
-            .then(function (people) {
-                res.send(people);
-            }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error getting People');
-    });
-});
+app.get('/api/people', isLoggedIn, controllers.getPeople);
 
-app.get('/api/institutes', isLoggedIn, function (req, res) {
-    var q = req.query.q || '';
-    knex('people')
-            .distinct('institute')
-            .where('institute', 'like', '%' + q + '%')
-            .map(function (row) {
-                return row.institute;
-            })
-            .then(function (people) {
-                res.send(people);
-            }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error getting Institute');
-    });
-});
+app.get('/api/institutes', isLoggedIn, controllers.getInstitutes);
 
-app.get('/api/platforms', isLoggedIn, function (req, res) {
-    var q = req.query.q || '';
-    knex('meetings')
-            .distinct()
-            .select('platform')
-            .where('platform', 'like', '%' + q + '%')
-            .then(function (platforms) {
-                platforms = _.map(platforms, 'platform');
-                res.send(platforms);
-            }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error getting Platforms');
-    });
-});
+app.get('/api/platforms', isLoggedIn, controllers.getPlatforms);
 
-app.post('/api/meetings', isLoggedIn, function (req, res) {
-    var meetingFields = ['location', 'date', 'topics', 'platform'];
-    var data = _.pick(req.body, meetingFields);
-    var participants = req.body.participants;
-    new Meeting(data).save()
-            .then(function (meeting) {
-                var participantsIds = _.map(participants, 'id');
-                return meeting.participants().attach(participantsIds);
-            })
-            .then(function (meeting) {
-                res.send(meeting);
-            })
-            .catch(function (error) {
-                console.log(error.stack);
-                res.send('Error creating Meeting');
-            });
-});
+app.post('/api/meetings', isLoggedIn, controllers.createMeeting);
 
-app.put('/api/meetings/:id', isLoggedIn, function (req, res) {
-    var meetingFields = ['location', 'date', 'topics', 'platform'];
-    var meetingId = req.params.id;
-    var data = _.pick(req.body, meetingFields);
-    var participants = req.body.participants;
-    new Meeting({id: meetingId})
-            .save(data)
-            .then(function (meeting) {
-                return meeting.participants().detach()
-                        .then(function (m) {
-                            var participantsIds = _.map(participants, 'id');
-                            return meeting.participants().attach(participantsIds);
-                        });
-            })
-            .then(function (meeting) {
-                res.send(meeting);
-            })
-            .catch(function (error) {
-                console.log(error.stack);
-                res.send('Error creating Meeting');
-            });
-});
+app.put('/api/meetings/:id', isLoggedIn, controllers.updateMeeting);
 
-app.post('/api/people', isLoggedIn, function (req, res) {
-    var meetingFields = ['surname', 'institute'];
-    var data = _.pick(req.body, meetingFields);
-    new Person(data).save().then(function (person) {
-        res.send(person);
-    }).catch(function (error) {
-        console.log(error.stack);
-        res.send('Error creating Person');
-    });
-});
+app.post('/api/people', isLoggedIn, controllers.createPerson);
 
-app.delete('/api/meetings/:id', isLoggedIn, function (req, res) {
-    var meetingId = req.params.id;
-    new Meeting({id: meetingId})
-            .destroy()
-            .then(function () {
-                res.send();
-            });
-});
+app.delete('/api/meetings/:id', isLoggedIn, controllers.deleteMeeting);
 
 app.listen(port, function () {
     console.log('Server listening on port ' + port);
@@ -340,18 +201,4 @@ function addPathPrefix(filePath, prefix) {
 
 function getFileExtension(filePath) {
     return filePath.split('.').pop();
-}
-
-function formatDate(date) {
-    var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
 }
