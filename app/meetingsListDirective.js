@@ -131,9 +131,10 @@ angular.module('meetings').controller('ModalInstanceCtrl', function ($uibModalIn
 angular.module('meetings').controller('editingFormCtrl', function ($uibModalInstance, meeting) {
     var vm = this;
     vm.meeting = meeting;
+    vm.closeModal = closeModal;
 
-    vm.ok = function (meeting) {
+    function closeModal(meeting) {
         $uibModalInstance.close(meeting);
-    };
+    }
 
 });

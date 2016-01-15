@@ -9,6 +9,7 @@ angular.module('meetings')
                 },
                 bindToController: {
                     onSubmit: '&',
+                    onCancel: '&',
                     meeting: '='
                 }
             };
@@ -25,6 +26,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     vm.removeParticipant = removeParticipant;
     vm.creationMode = false;
     vm.getInstitutes = getInstitutes;
+    vm.cancel = cancel;
     
     activate();
 
@@ -35,6 +37,11 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     function callOnSubmitCallback() {
         if (_.isFunction(vm.onSubmit()))
             vm.onSubmit()();
+    }
+
+    function callOnCancelCallback() {
+        if (_.isFunction(vm.onCancel()))
+            vm.onCancel()();
     }
     
     function setupComponents() {
@@ -56,6 +63,10 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     
     function getInstitutes(q) {
         return Restangular.all('institutes').getList({q: q});
+    }
+    
+    function cancel() {
+        callOnCancelCallback();
     }
 
     function submit() {
