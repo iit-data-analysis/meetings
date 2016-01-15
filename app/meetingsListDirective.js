@@ -66,11 +66,11 @@ function meetingsListController($uibModal, Notification, MeetingsService, People
     }
 
     function openEditingForm(meeting, $event) {
-        var resolve = {meeting: meeting};
+        var resolve = {meeting: meeting.clone()};
         var modalInstance = openModal('editingForm.html', 'editingFormCtrl', resolve, $event);
 
         modalInstance.result.then(function (meeting) {
-            console.log(arguments);
+            refresh();
         }, function () {
         });
     }
