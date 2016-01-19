@@ -9,32 +9,16 @@ module.exports = {
         var institute = req.query.institute;
         var date = req.query.date;
         var dateRange = req.query.daterange ? JSON.parse(req.query.daterange) : null;
+        var options = {
+            limit: limit,
+            surname: surname,
+            institute: institute,
+            date: date,
+            dateRange: dateRange
+        };
         new Meeting()
-                .query(function (qb) {
-                    qb.orderBy('updated_at', 'desc');
-                    if (limit)
-                        qb.limit(limit);
-                    if (dateRange)
-                        qb.whereBetween('date', [dateRange.startDate, dateRange.endDate]);
-                    if (date)
-                        qb.where('date', '=', date);
-                    if (surname)
-                        qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
-                                .join('people', 'people.id', '=', 'meetings_people.person_id')
-                                .where('people.surname', 'ILIKE', '%' + surname + '%');
-                    if (institute)
-                        qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
-                                .join('people', 'people.id', '=', 'meetings_people.person_id')
-                                .where('people.institute', 'ILIKE', '%' + institute + '%');
-                })
-                .fetchAll({
-                    withRelated: ['participants']
-                })
+                .get(options)
                 .then(function (meetings) {
-                    meetings = _.map(meetings.toJSON(), function (m) {
-                        m.date = formatDate(m.date);
-                        return m;
-                    });
                     res.send(meetings);
                 }).catch(function (error) {
             console.log(error.stack);
@@ -149,19 +133,3 @@ module.exports = {
                 });
     }
 };
-
-
-
-function formatDate(date) {
-    var d = new Date(date),
-            month = '' + (d.getMonth() + 1),
-            day = '' + d.getDate(),
-            year = d.getFullYear();
-
-    if (month.length < 2)
-        month = '0' + month;
-    if (day.length < 2)
-        day = '0' + day;
-
-    return [year, month, day].join('-');
-}
