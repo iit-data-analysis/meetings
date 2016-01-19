@@ -21,11 +21,11 @@ module.exports = {
                     if (surname)
                         qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
                                 .join('people', 'people.id', '=', 'meetings_people.person_id')
-                                .where('people.surname', '=', surname);
+                                .where('people.surname', 'ILIKE', '%' + surname + '%');
                     if (institute)
                         qb.join('meetings_people', 'meetings.id', '=', 'meetings_people.meeting_id')
                                 .join('people', 'people.id', '=', 'meetings_people.person_id')
-                                .where('people.institute', '=', institute);
+                                .where('people.institute', 'ILIKE', '%' + institute + '%');
                 })
                 .fetchAll({
                     withRelated: ['participants']
@@ -45,8 +45,8 @@ module.exports = {
         var q = req.query.q || '';
         knex('people')
                 .select()
-                .where('surname', 'like', '%' + q + '%')
-                .orWhere('institute', 'like', '%' + q + '%')
+                .where('surname', 'ILIKE', '%' + q + '%')
+                .orWhere('institute', 'ILIKE', '%' + q + '%')
                 .then(function (people) {
                     res.send(people);
                 }).catch(function (error) {
@@ -66,7 +66,7 @@ module.exports = {
         var q = req.query.q || '';
         knex('people')
                 .distinct('institute')
-                .where('institute', 'like', '%' + q + '%')
+                .where('institute', 'ILIKE', '%' + q + '%')
                 .map(function (row) {
                     return row.institute;
                 })
@@ -82,7 +82,7 @@ module.exports = {
         knex('meetings')
                 .distinct()
                 .select('platform')
-                .where('platform', 'like', '%' + q + '%')
+                .where('platform', 'ILIKE', '%' + q + '%')
                 .then(function (platforms) {
                     platforms = _.map(platforms, 'platform');
                     res.send(platforms);
