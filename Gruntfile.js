@@ -44,55 +44,6 @@ module.exports = function(grunt) {
             }
         },
 
-        jshint: {
-            app: {
-                options: {
-                    browser: true,
-                    globals: {
-                        angular: false,
-                        console: false,
-                        meetings: true,
-                        _: false
-                    },
-                    laxcomma: true,
-                    maxlen: 120,
-                    unused: 'vars',
-                    undef: true
-                },
-                files: {
-                    src: [
-                        'app/**/*.js',
-                        '!app/**/*_test.js'
-                    ]
-                }
-            },
-            server: {
-                options: {
-                    node: true,
-                    globals: (function() {
-                        // add model names to globals
-                        var globals = {};
-                        var models = grunt.file.expand('./server/models/**/*.js');
-                        for(var i in models) {
-                            globals[
-                                models[i]
-                                    .replace(/^.*[\\\/]/, '')
-                                    .split('.')[0]
-                            ] = true;
-                        }
-                        return globals;
-                    })(),
-                    laxcomma: true,
-                    maxlen: 120,
-                    unused: 'vars',
-                    undef: true
-                },
-                files: {
-                    src: ['server/**/*.js']
-                }
-            }
-        },
-
         less: {
             unminified: {
                 files: {
@@ -122,15 +73,6 @@ module.exports = function(grunt) {
             }
         },
 
-        karma: {
-            unit: {
-                configFile: 'test/karma.conf.js',
-                autoWatch: false,
-                singleRun: true,
-                browsers: ['PhantomJS']
-            }
-        },
-
         watch: {
             options: {
                 livereload: true,
@@ -143,22 +85,18 @@ module.exports = function(grunt) {
             app_markup: {
                 files: ['app/**/*.html'],
                 tasks: [
-                    'jshint:app',
                     'copy-app-dist'
                 ]
             },
             app_code: {
                 files: ['app/**/*.js'],
                 tasks: [
-                    'jshint:app',
-                    'copy-app-dist',
-                    'karma'
+                    'copy-app-dist'
                 ]
             },
             server: {
                 files: ['server/**'],
                 tasks: [
-                    'jshint:server',
                     'copy-server-dist',
                     'express'
                 ]
@@ -200,7 +138,6 @@ module.exports = function(grunt) {
     ]);
 
     grunt.registerTask('default', [
-        'jshint',
         'build-dist',
         'express',
         'watch'
