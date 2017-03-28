@@ -1,4 +1,10 @@
-/dist/
-/bower_components/
-/node_modules/
-/nbproject/
+src/dist/
+src/bower_components/
+src/node_modules/
+nbproject/
+.idea/
+
+db/*
+!db/.gitkeep
+
+docker-compose.yml

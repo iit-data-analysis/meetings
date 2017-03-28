@@ -1,0 +1,23 @@
+version: '2'
+
+services:
+  node:
+    build: ./docker/node
+    restart: always
+    volumes:
+      - .:/usr/src/app
+    ports:
+      - "8086:9999"
+    environment:
+      - NODE_ENV=production
+      - PG_CONNECTION_STRING=postgres://meetings:meetings@db:5432
+    command: grunt build-dist && npm start
+  db:
+    image: postgres:9.6
+    restart: always
+    volumes:
+      - ./docker/db/data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_DB: meetings
+      POSTGRES_USER: meetings
+      POSTGRES_PASSWORD: meetings

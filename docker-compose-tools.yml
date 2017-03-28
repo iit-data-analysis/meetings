@@ -1,0 +1,20 @@
+version: '2'
+services:
+  npm:
+    build: ./docker/node
+    entrypoint: npm
+    volumes:
+      - ./src:/app
+    working_dir: /app
+  bower:
+    build: ./docker/node
+    entrypoint: bower
+    volumes:
+      - ./src:/app
+    working_dir: /app
+  grunt:
+    build: ./docker/node
+    entrypoint: grunt
+    volumes:
+      - ./src:/app
+    working_dir: /app
