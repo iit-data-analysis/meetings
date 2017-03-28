@@ -1,14 +1,14 @@
 # meetings
 A small application to manage meetings minutes
 
-##Deploy
+## Production
 
 To run the application, run:
 
   grunt build-dist && npm start
   
-##Development
+## Development
 
-To run the program in development, run:
+To run the application in development, run:
 
   grunt
