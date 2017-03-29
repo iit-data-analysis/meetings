@@ -1,0 +1,9 @@
+{
+  "server": {
+    "url": "",
+    "searchBase": "",
+    "adminDn": "",
+    "adminPassword": "",
+    "searchFilter": ""
+  }
+}
