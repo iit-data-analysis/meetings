@@ -8,9 +8,9 @@ angular.module('meetings')
                 scope: {
                 },
                 bindToController: {
-                    onSubmit: '&',
-                    onCancel: '&',
-                    meeting: '='
+                    onSubmit: '&?',
+                    onCancel: '&?',
+                    meeting: '=?'
                 }
             };
         });
@@ -35,7 +35,7 @@ function meetingsFormController(MeetingsService, PeopleService, Restangular, Not
     }
 
     function callOnSubmitCallback() {
-        if (_.isFunction(vm.onSubmit()))
+        if (vm.onSubmit && _.isFunction(vm.onSubmit()))
             vm.onSubmit()();
     }
 
