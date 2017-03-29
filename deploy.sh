@@ -1,12 +1,11 @@
 #!/usr/bin/env bash
 
-docker-compose down
-
 git reset --hard
 git pull
 chmod u+x deploy.sh
-./bower.sh install
-./npm.sh install
-./knex.sh migrate:latest
+bash bower.sh install
+bash npm.sh install
+bash knex.sh migrate:latest
 
+docker-compose down
 docker-compose up -d
