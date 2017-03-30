@@ -18,3 +18,11 @@ services:
     volumes:
       - ./src:/app
     working_dir: /app
+  knex:
+    build: ./docker/node
+    environment:
+      - PG_CONNECTION_STRING=postgres://meetings:meetings@db:5432
+    entrypoint: knex
+    volumes:
+      - ./src:/app
+    working_dir: /app

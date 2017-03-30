@@ -5,14 +5,14 @@ services:
     build: ./docker/node
     restart: always
     volumes:
-      - .:/usr/src/app
+      - ./src:/usr/src/app
     ports:
-      - "8086:9999"
+      - "8087:9999"
       - "35729:35729"
     environment:
       - NODE_ENV=development
       - PG_CONNECTION_STRING=postgres://meetings:meetings@db:5432
-    command: grunt
+    command: bash -c "grunt"
   db:
     image: postgres:9.6
     restart: always
