@@ -85,7 +85,7 @@
                     view[i] = s.charCodeAt(i) & 0xFF;
                 return buf;
             }
-            FileSaver.saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "test.xlsx");
+            FileSaver.saveAs(new Blob([s2ab(wbout)], {type: "application/octet-stream"}), "meetings_export.xlsx");
         };
 
         service.getNewMeeting = function () {
